@@ -4,7 +4,9 @@ import com.gungorefe.simpleportfolio.dto.page.home.HomeDto;
 import com.gungorefe.simpleportfolio.entity.page.Locale;
 import com.gungorefe.simpleportfolio.entity.page.Page;
 import com.gungorefe.simpleportfolio.entity.page.component.CarouselSection;
+import com.gungorefe.simpleportfolio.entity.page.component.DetailedCard;
 import com.gungorefe.simpleportfolio.entity.page.component.home.HomeCarouselSection;
+import com.gungorefe.simpleportfolio.entity.page.component.home.HomeDetailedCard;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -27,6 +29,8 @@ public class Home extends Page {
     private String secondText;
     @OneToMany(mappedBy = "home")
     private Collection<HomeCarouselSection> carouselSections;
+    @OneToMany(mappedBy = "home")
+    private Collection<HomeDetailedCard> detailedCards;
 
     public Home(int id) {
         super(id);
@@ -51,7 +55,8 @@ public class Home extends Page {
                 text,
                 secondTitle,
                 secondText,
-                CarouselSection.toDtoList(carouselSections)
+                CarouselSection.toDtoList(carouselSections),
+                DetailedCard.toDtoList(detailedCards)
         );
     }
 }

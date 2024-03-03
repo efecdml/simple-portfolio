@@ -19,6 +19,14 @@ public interface HomeRepository extends JpaRepository<Home, Integer> {
     Optional<Home> findWithCarouselSectionsByLocale_Name(LocaleName localeName);
 
     @Query("""
+            SELECT h
+            FROM Home h
+            LEFT JOIN FETCH h.detailedCards
+            WHERE h.locale.name = ?1
+            """)
+    Optional<Home> findWithDetailedCardsByLocale_Name(LocaleName localeName);
+
+    @Query("""
             SELECT NEW Home(h.id, h.locale.id)
             FROM Home h
             WHERE h.locale.name = ?1

@@ -8,16 +8,21 @@ import com.gungorefe.simpleportfolio.exception.ExceptionFactory;
 import com.gungorefe.simpleportfolio.repository.page.home.HomeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
 public class HomeService {
     private final HomeRepository repository;
 
+    @Transactional(readOnly = true)
     public HomeDto getDto(LocaleName localeName) {
-        return repository.findWithCarouselSectionsByLocale_Name(localeName)
-                .map(Home::toDto)
+        Home home = repository.findWithCarouselSectionsByLocale_Name(localeName)
+                .orElse(null);
+        home = repository.findWithDetailedCardsByLocale_Name(localeName)
                 .orElseThrow(() -> ExceptionFactory.pageNotFoundException(Home.NAME, localeName));
+
+        return home.toDto();
     }
 
     public Home update(
