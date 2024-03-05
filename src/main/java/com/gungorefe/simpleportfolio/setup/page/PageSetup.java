@@ -3,9 +3,11 @@ package com.gungorefe.simpleportfolio.setup.page;
 import com.gungorefe.simpleportfolio.entity.page.Locale;
 import com.gungorefe.simpleportfolio.entity.page.LocaleName;
 import com.gungorefe.simpleportfolio.entity.page.about.About;
+import com.gungorefe.simpleportfolio.entity.page.contact.Contact;
 import com.gungorefe.simpleportfolio.entity.page.home.Home;
 import com.gungorefe.simpleportfolio.repository.page.LocaleRepository;
 import com.gungorefe.simpleportfolio.repository.page.about.AboutRepository;
+import com.gungorefe.simpleportfolio.repository.page.contact.ContactRepository;
 import com.gungorefe.simpleportfolio.repository.page.home.HomeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +25,7 @@ public class PageSetup implements ApplicationListener<ContextRefreshedEvent> {
     private final LocaleRepository localeRepository;
     private final HomeRepository homeRepository;
     private final AboutRepository aboutRepository;
+    private final ContactRepository contactRepository;
     private final LocaleName localeNameEnglish = LocaleName.ENGLISH;
     private final LocaleName localeNameTurkish = LocaleName.TURKISH;
     private Locale localeEnglish;
@@ -61,10 +64,22 @@ public class PageSetup implements ApplicationListener<ContextRefreshedEvent> {
         }
     }
 
+    private void insertContactPagesIfNotExist() {
+        if (!contactRepository.existsByLocale_Name(localeNameEnglish)) {
+            log.warn("English Contact page not found, inserting..");
+            contactRepository.save(new Contact(localeEnglish, "", "", "", "", "", "", ""));
+        }
+        if (!contactRepository.existsByLocale_Name(localeNameTurkish)) {
+            log.warn("Turkish Contact page not found, inserting..");
+            contactRepository.save(new Contact(localeTurkish, "", "", "", "", "", "", ""));
+        }
+    }
+
     @Override
     public void onApplicationEvent(@NonNull ContextRefreshedEvent event) {
         insertLocalesIfNotExist();
         insertHomePagesIfNotExist();
         insertAboutPagesIfNotExist();
+        insertContactPagesIfNotExist();
     }
 }
