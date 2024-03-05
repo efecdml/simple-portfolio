@@ -27,8 +27,4 @@ public class HomeDetailedCard extends DetailedCard {
         super(imageName, title, text, displayOrder);
         this.home = home;
     }
-
-    public HomeDetailedCard(int id, String imageName, String title, String text, int displayOrder) {
-        super(id, imageName, title, text, displayOrder);
-    }
 }

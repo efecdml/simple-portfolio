@@ -20,7 +20,7 @@ public class AboutService {
     private final ImageService imageService;
 
     public AboutDto getDto(LocaleName localeName) {
-        return repository.findByLocale_Name(localeName)
+        return repository.findWithSimpleCardsByLocale_Name(localeName)
                 .map(About::toDto)
                 .orElseThrow(() -> ExceptionFactory.pageNotFoundException(About.NAME, localeName));
     }

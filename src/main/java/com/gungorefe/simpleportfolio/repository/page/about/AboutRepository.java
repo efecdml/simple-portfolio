@@ -10,7 +10,13 @@ import java.util.Optional;
 
 @Repository
 public interface AboutRepository extends JpaRepository<About, Integer> {
-    Optional<About> findByLocale_Name(LocaleName localeName);
+    @Query("""
+            SELECT a
+            FROM About a
+            LEFT JOIN FETCH a.simpleCards
+            WHERE a.locale.name = ?1
+            """)
+    Optional<About> findWithSimpleCardsByLocale_Name(LocaleName localeName);
 
     @Query("""
             SELECT NEW About(a.id, a.locale.id, a.imageName)
