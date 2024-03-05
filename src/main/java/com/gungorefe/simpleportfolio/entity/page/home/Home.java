@@ -3,11 +3,16 @@ package com.gungorefe.simpleportfolio.entity.page.home;
 import com.gungorefe.simpleportfolio.dto.page.home.HomeDto;
 import com.gungorefe.simpleportfolio.entity.page.Locale;
 import com.gungorefe.simpleportfolio.entity.page.Page;
+import com.gungorefe.simpleportfolio.entity.page.component.CarouselSection;
+import com.gungorefe.simpleportfolio.entity.page.component.home.HomeCarouselSection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Collection;
 
 @Getter
 @NoArgsConstructor
@@ -20,6 +25,12 @@ public class Home extends Page {
     private String text;
     private String secondTitle;
     private String secondText;
+    @OneToMany(mappedBy = "home")
+    private Collection<HomeCarouselSection> carouselSections;
+
+    public Home(int id) {
+        super(id);
+    }
 
     public Home(int id, int localeId) {
         super(id, new Locale(localeId));
@@ -39,7 +50,8 @@ public class Home extends Page {
                 title,
                 text,
                 secondTitle,
-                secondText
+                secondText,
+                CarouselSection.toDtoList(carouselSections)
         );
     }
 }

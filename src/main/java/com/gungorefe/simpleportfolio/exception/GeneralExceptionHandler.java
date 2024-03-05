@@ -5,6 +5,7 @@ import com.gungorefe.simpleportfolio.exception.filestorage.UnacceptableImageMime
 import com.gungorefe.simpleportfolio.exception.filestorage.UnacceptableImageNameException;
 import com.gungorefe.simpleportfolio.exception.page.LocaleNotFoundException;
 import com.gungorefe.simpleportfolio.exception.page.PageNotFoundException;
+import com.gungorefe.simpleportfolio.exception.page.component.ComponentNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,17 +36,22 @@ public class GeneralExceptionHandler {
 
     @ExceptionHandler(PageNotFoundException.class)
     public ResponseEntity<String> pageNotFoundException(PageNotFoundException exception) {
-        return new ResponseEntity<>(
-                exception.getMessage(),
-                HttpStatus.NOT_FOUND
-        );
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
     }
 
     @ExceptionHandler(LocaleNotFoundException.class)
     public ResponseEntity<String> localeNotFoundException(LocaleNotFoundException exception) {
-        return new ResponseEntity<>(
-                exception.getMessage(),
-                HttpStatus.NOT_FOUND
-        );
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(ComponentNotFoundException.class)
+    public ResponseEntity<String> componentNotFoundException(ComponentNotFoundException exception) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
     }
 }

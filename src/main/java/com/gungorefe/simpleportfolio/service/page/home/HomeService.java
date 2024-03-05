@@ -15,7 +15,7 @@ public class HomeService {
     private final HomeRepository repository;
 
     public HomeDto getDto(LocaleName localeName) {
-        return repository.findByLocale_Name(localeName)
+        return repository.findWithCarouselSectionsByLocale_Name(localeName)
                 .map(Home::toDto)
                 .orElseThrow(() -> ExceptionFactory.pageNotFoundException(Home.NAME, localeName));
     }

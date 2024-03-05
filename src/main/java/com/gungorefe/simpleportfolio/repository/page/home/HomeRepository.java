@@ -10,7 +10,13 @@ import java.util.Optional;
 
 @Repository
 public interface HomeRepository extends JpaRepository<Home, Integer> {
-    Optional<Home> findByLocale_Name(LocaleName localeName);
+    @Query("""
+            SELECT h
+            FROM Home h
+            LEFT JOIN FETCH h.carouselSections
+            WHERE h.locale.name = ?1
+            """)
+    Optional<Home> findWithCarouselSectionsByLocale_Name(LocaleName localeName);
 
     @Query("""
             SELECT NEW Home(h.id, h.locale.id)

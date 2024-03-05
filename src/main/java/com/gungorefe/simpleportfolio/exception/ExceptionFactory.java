@@ -6,6 +6,7 @@ import com.gungorefe.simpleportfolio.exception.filestorage.UnacceptableImageMime
 import com.gungorefe.simpleportfolio.exception.filestorage.UnacceptableImageNameException;
 import com.gungorefe.simpleportfolio.exception.page.LocaleNotFoundException;
 import com.gungorefe.simpleportfolio.exception.page.PageNotFoundException;
+import com.gungorefe.simpleportfolio.exception.page.component.ComponentNotFoundException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -38,5 +39,16 @@ public final class ExceptionFactory {
 
     public static LocaleNotFoundException localeNotFoundException(String localeName) {
         return new LocaleNotFoundException("Locale not found: " + localeName);
+    }
+
+    public static ComponentNotFoundException componentNotFoundException(
+            String componentName,
+            int id
+    ) {
+        return new ComponentNotFoundException(MessageFormat.format(
+                "Component: {0} not found by ID: {1}",
+                componentName,
+                id
+        ));
     }
 }
