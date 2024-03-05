@@ -3,12 +3,17 @@ package com.gungorefe.simpleportfolio.entity.page.contact;
 import com.gungorefe.simpleportfolio.dto.page.contact.ContactDto;
 import com.gungorefe.simpleportfolio.entity.page.Locale;
 import com.gungorefe.simpleportfolio.entity.page.Page;
+import com.gungorefe.simpleportfolio.entity.page.component.Phone;
+import com.gungorefe.simpleportfolio.entity.page.component.contact.ContactPhone;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Collection;
 
 @Getter
 @NoArgsConstructor
@@ -27,6 +32,12 @@ public class Contact extends Page {
     private String workingHours;
     @Column(columnDefinition = "text")
     private String googleMapsCoordination;
+    @OneToMany(mappedBy = "contact")
+    private Collection<ContactPhone> phones;
+
+    public Contact(int id) {
+        super(id);
+    }
 
     public Contact(int id, int localeId) {
         super(id, new Locale(localeId));
@@ -51,7 +62,8 @@ public class Contact extends Page {
                 location,
                 workingDays,
                 workingHours,
-                googleMapsCoordination
+                googleMapsCoordination,
+                Phone.toDtoList(phones)
         );
     }
 }

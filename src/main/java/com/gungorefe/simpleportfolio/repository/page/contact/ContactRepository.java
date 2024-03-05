@@ -10,7 +10,13 @@ import java.util.Optional;
 
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Integer> {
-    Optional<Contact> findByLocale_Name(LocaleName localeName);
+    @Query("""
+            SELECT c
+            FROM Contact c
+            LEFT JOIN FETCH c.phones
+            WHERE c.locale.name = ?1
+            """)
+    Optional<Contact> findWithPhonesByLocale_Name(LocaleName localeName);
 
     @Query("""
             SELECT NEW Contact(c.id, c.locale.id)

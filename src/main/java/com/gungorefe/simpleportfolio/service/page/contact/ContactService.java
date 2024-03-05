@@ -15,7 +15,7 @@ public class ContactService {
     private final ContactRepository repository;
 
     public ContactDto getDto(LocaleName localeName) {
-        return repository.findByLocale_Name(localeName)
+        return repository.findWithPhonesByLocale_Name(localeName)
                 .map(Contact::toDto)
                 .orElseThrow(() -> ExceptionFactory.pageNotFoundException(Contact.NAME, localeName));
     }
