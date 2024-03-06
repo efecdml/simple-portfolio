@@ -24,7 +24,7 @@ public class Role implements GrantedAuthority {
     @Enumerated(EnumType.STRING)
     private RoleName name;
     @OneToMany(mappedBy = "role")
-    Collection<User> users;
+    private Collection<User> users;
 
     public Role(RoleName name) {
         this.name = name;

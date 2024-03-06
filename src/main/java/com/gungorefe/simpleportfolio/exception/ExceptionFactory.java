@@ -9,6 +9,7 @@ import com.gungorefe.simpleportfolio.exception.page.PageNotFoundException;
 import com.gungorefe.simpleportfolio.exception.page.component.ComponentNotFoundException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import java.text.MessageFormat;
 
@@ -50,5 +51,9 @@ public final class ExceptionFactory {
                 componentName,
                 id
         ));
+    }
+
+    public static BadCredentialsException badCredentialsException() {
+        return new BadCredentialsException("Bad credentials");
     }
 }
