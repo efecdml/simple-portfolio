@@ -38,7 +38,10 @@ public class AboutController {
     }
 
     @Operation(summary = "Update About page")
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            value = "/competent"
+    )
     public ResponseEntity<Void> update(
             @AcceptHeader LocaleName localeName,
             @RequestPart(required = false) MultipartFile image,

@@ -21,7 +21,10 @@ public class HomeCarouselSectionController {
     private final HomeCarouselSectionService service;
 
     @Operation(summary = "Create Home Carousel Section component")
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            value = "/competent"
+    )
     public ResponseEntity<Void> create(
             @RequestPart MultipartFile image,
             @RequestPart CreateCarouselSectionRequest request
@@ -43,7 +46,7 @@ public class HomeCarouselSectionController {
     }
 
     @Operation(summary = "Get all Home Carousel Section components")
-    @GetMapping("/page-id/{pageId}")
+    @GetMapping("/competent/page-id/{pageId}")
     public ResponseEntity<List<CarouselSectionDto>> getAllDtos(@PathVariable int pageId) {
         List<CarouselSectionDto> dtos = service.getAllDtos(pageId);
 
@@ -61,7 +64,10 @@ public class HomeCarouselSectionController {
     }
 
     @Operation(summary = "Update Home Carousel Section component")
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            value = "/competent"
+    )
     public ResponseEntity<Void> update(
             @RequestPart(required = false) MultipartFile image,
             @RequestPart UpdateCarouselSectionRequest request
@@ -75,7 +81,7 @@ public class HomeCarouselSectionController {
     }
 
     @Operation(summary = "Delete Home Carousel Section component")
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/competent/id/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         service.delete(id);
 

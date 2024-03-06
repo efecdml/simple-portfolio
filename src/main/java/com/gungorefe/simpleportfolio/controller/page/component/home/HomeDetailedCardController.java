@@ -21,7 +21,10 @@ public class HomeDetailedCardController {
     private final HomeDetailedCardService service;
 
     @Operation(summary = "Create Home Detailed Card component")
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            value = "/competent"
+    )
     public ResponseEntity<Void> create(
             @RequestPart MultipartFile image,
             @RequestPart CreateCardRequest request
@@ -43,7 +46,7 @@ public class HomeDetailedCardController {
     }
 
     @Operation(summary = "Get all Home Detailed Card components")
-    @GetMapping("/page-id/{pageId}")
+    @GetMapping("/competent/page-id/{pageId}")
     public ResponseEntity<List<CardDto>> getAllDtos(@PathVariable int pageId) {
         List<CardDto> dtos = service.getAllDtos(pageId);
 
@@ -61,7 +64,10 @@ public class HomeDetailedCardController {
     }
 
     @Operation(summary = "Update Home Detailed Card component")
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            value = "/competent"
+    )
     public ResponseEntity<Void> update(
             @RequestPart(required = false) MultipartFile image,
             @RequestPart UpdateCardRequest request
@@ -75,7 +81,7 @@ public class HomeDetailedCardController {
     }
 
     @Operation(summary = "Delete Home Detailed Card component")
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/competent/id/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         service.delete(id);
 

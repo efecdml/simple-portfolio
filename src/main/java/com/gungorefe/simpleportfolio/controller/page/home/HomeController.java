@@ -25,7 +25,7 @@ public class HomeController {
     }
 
     @Operation(summary = "Update Home page")
-    @PutMapping
+    @PutMapping("/competent/**")
     public ResponseEntity<Void> update(
             @AcceptHeader LocaleName localeName,
             @RequestBody UpdateHomeRequest request

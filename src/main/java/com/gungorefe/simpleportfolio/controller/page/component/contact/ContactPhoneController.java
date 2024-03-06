@@ -18,7 +18,7 @@ public class ContactPhoneController {
     private final ContactPhoneService service;
 
     @Operation(summary = "Create Contact Phone component")
-    @PostMapping
+    @PostMapping("/competent")
     public ResponseEntity<Void> create(@RequestBody CreatePhoneRequest request) {
         service.create(request);
 
@@ -34,7 +34,7 @@ public class ContactPhoneController {
     }
 
     @Operation(summary = "Get all Contact Phone components")
-    @GetMapping("/page-id/{pageId}")
+    @GetMapping("/competent/page-id/{pageId}")
     public ResponseEntity<List<PhoneDto>> getAllDtos(@PathVariable int pageId) {
         List<PhoneDto> dtos = service.getAllDtos(pageId);
 
@@ -42,7 +42,7 @@ public class ContactPhoneController {
     }
 
     @Operation(summary = "Update Contact Phone component")
-    @PutMapping
+    @PutMapping("/competent")
     public ResponseEntity<Void> update(@RequestBody UpdatePhoneRequest request) {
         service.update(request);
 
@@ -50,7 +50,7 @@ public class ContactPhoneController {
     }
 
     @Operation(summary = "Delete Contact Phone component")
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/competent/id/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         service.delete(id);
 

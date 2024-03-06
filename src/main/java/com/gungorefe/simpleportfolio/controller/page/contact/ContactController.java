@@ -25,7 +25,7 @@ public class ContactController {
     }
 
     @Operation(summary = "Update Contact page")
-    @PutMapping
+    @PutMapping("/competent")
     public ResponseEntity<Void> update(
             @AcceptHeader LocaleName localeName,
             @RequestBody UpdateContactRequest request

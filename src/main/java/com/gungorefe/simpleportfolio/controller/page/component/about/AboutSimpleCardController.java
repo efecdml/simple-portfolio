@@ -21,7 +21,10 @@ public class AboutSimpleCardController {
     private final AboutSimpleCardService service;
 
     @Operation(summary = "Create About Simple Card component")
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            value = "/competent"
+    )
     public ResponseEntity<Void> create(
             @RequestPart MultipartFile image,
             @RequestPart CreateCardRequest request
@@ -43,7 +46,7 @@ public class AboutSimpleCardController {
     }
 
     @Operation(summary = "Get all About Simple Card components")
-    @GetMapping("/page-id/{pageId}")
+    @GetMapping("/competent/page-id/{pageId}")
     public ResponseEntity<List<CardDto>> getAllDtos(@PathVariable int pageId) {
         List<CardDto> dtos = service.getAllDtos(pageId);
 
@@ -61,7 +64,10 @@ public class AboutSimpleCardController {
     }
 
     @Operation(summary = "Update About Simple Card component")
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            value = "/competent"
+    )
     public ResponseEntity<Void> update(
             @RequestPart(required = false) MultipartFile image,
             @RequestPart UpdateCardRequest request
@@ -75,7 +81,7 @@ public class AboutSimpleCardController {
     }
 
     @Operation(summary = "Delete About Simple Card component")
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/competent/id/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         service.delete(id);
 

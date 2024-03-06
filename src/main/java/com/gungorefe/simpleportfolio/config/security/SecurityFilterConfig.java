@@ -1,5 +1,6 @@
 package com.gungorefe.simpleportfolio.config.security;
 
+import com.gungorefe.simpleportfolio.dto.security.SecuredEndpoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,14 +18,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityFilterConfig {
     private final AuthenticationProvider authProvider;
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final String[] blacklist = {};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(blacklist)
+                        .requestMatchers(SecuredEndpoint.getValues())
                         .authenticated()
                         .anyRequest()
                         .permitAll())
