@@ -1,5 +1,6 @@
 package com.gungorefe.simpleportfolio.util;
 
+import com.google.common.net.HttpHeaders;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
@@ -50,5 +51,16 @@ public final class WebUtils extends org.springframework.web.util.WebUtils {
                 "",
                 Duration.ZERO
         );
+    }
+
+    public static String getIp(HttpServletRequest request) {
+        String xffHeader = request.getHeader(HttpHeaders.X_FORWARDED_FOR);
+        String remoteAddress = request.getRemoteAddr();
+
+        return xffHeader == null ||
+                xffHeader.isBlank() ||
+                !xffHeader.contains(remoteAddress)
+                ? remoteAddress
+                : xffHeader.split(";")[0];
     }
 }

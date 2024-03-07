@@ -9,7 +9,9 @@ public enum SecuredEndpoint {
     ABOUT_SIMPLE_CARD("/api/pages/about/components/simple-card/competent/**"),
     CONTACT_PHONE("/api/pages/contact/components/phone/competent/**"),
     HOME_CAROUSEL_SECTION("/api/pages/home/components/carousel-section/competent/**"),
-    HOME_DETAILED_CARD("/api/pages/home/components/detailed-card/competent/**");
+    HOME_DETAILED_CARD("/api/pages/home/components/detailed-card/competent/**"),
+    USER("/api/users/competent/**"),
+    SESSION("/api/session/check");
     public final String value;
 
     SecuredEndpoint(String value) {

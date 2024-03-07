@@ -1,5 +1,6 @@
 package com.gungorefe.simpleportfolio.entity.security;
 
+import com.gungorefe.simpleportfolio.dto.security.UserDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Getter
@@ -28,8 +31,22 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Role role;
+    @OneToOne(mappedBy = "user")
+    private PasswordResetToken passwordResetToken;
+
+    public User(String email, Role role) {
+        this.email = email;
+        this.role = role;
+    }
 
     public User(String email, String password, Role role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    public User(UUID id, String email, String password, Role role) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -68,5 +85,19 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDto toDto() {
+        return new UserDto(
+                email,
+                role.getName()
+        );
+    }
+
+    public static Set<UserDto> toDtoSet(Collection<User> users) {
+        return Stream.ofNullable(users)
+                .flatMap(Collection::stream)
+                .map(User::toDto)
+                .collect(Collectors.toSet());
     }
 }

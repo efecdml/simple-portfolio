@@ -8,6 +8,9 @@ import java.time.Duration;
 public record SecurityProperties(
         String jwtSecretKey,
         Duration jwtExpirationDuration,
-        String accessTokenCookieName
+        String accessTokenCookieName,
+        int maxLoginAttempt,
+        Duration forbiddenLoginDuration,
+        Duration passwordResetTokenExpirationDuration
 ) {
 }

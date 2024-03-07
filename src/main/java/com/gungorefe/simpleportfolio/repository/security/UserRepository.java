@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -20,4 +21,14 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             WHERE u.email = ?1
             """)
     Optional<User> findWithRoleByEmail(String email);
+
+    @Query("""
+            SELECT NEW User(u.email,u.role)
+            FROM User u
+            """)
+    Set<User> findAllForDto();
+
+    boolean existsByEmail(String email);
+
+    void deleteByEmail(String email);
 }

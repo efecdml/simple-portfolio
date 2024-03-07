@@ -24,8 +24,10 @@ public class SecuritySetup implements ApplicationListener<ContextRefreshedEvent>
     private final PasswordEncoder passwordEncoder;
     private Role roleAdmin;
     private Role roleMod;
-    private User userAdmin;
-    private User userMod;
+    private final String adminEmail = "admin@email.com";
+    private final String adminPassword = "admin";
+    private final String modEmail = "mod@email.com";
+    private final String modPassword = "mod";
 
     private void insertRolesIfNotExist() {
         if (!roleRepository.existsByName(RoleName.ROLE_ADMIN)) {
@@ -41,35 +43,33 @@ public class SecuritySetup implements ApplicationListener<ContextRefreshedEvent>
     private void insertUsersIfNotExist() {
         if (!userRepository.existsByRole_Name(RoleName.ROLE_ADMIN)) {
             log.warn("No administrator users found, inserting..");
-            userAdmin = userRepository.save(new User(
-                    "admin@email.com",
-                    passwordEncoder.encode("admin"),
+            userRepository.save(new User(
+                    adminEmail,
+                    passwordEncoder.encode(adminPassword),
                     roleAdmin
             ));
-            userAdmin.setPassword("admin");
         }
     }
 
     private void initTestSetup() {
         if (!userRepository.existsByRole_Name(RoleName.ROLE_MOD)) {
             log.info("Inserting a moderator user for testing purpose..");
-            userMod = userRepository.save(new User(
-                    "mod@email.com",
-                    passwordEncoder.encode("mod"),
+            userRepository.save(new User(
+                    modEmail,
+                    passwordEncoder.encode(modPassword),
                     roleMod
             ));
-            userMod.setPassword("mod");
         }
 
         log.info(MessageFormat.format(
                 "Administrator user email: {0}, password: {1}",
-                userAdmin.getEmail(),
-                userAdmin.getPassword()
+                adminEmail,
+                adminPassword
         ));
         log.info(MessageFormat.format(
                 "Moderator user email: {0}, password: {1}",
-                userMod.getEmail(),
-                userMod.getPassword()
+                modEmail,
+                modPassword
         ));
     }
 
