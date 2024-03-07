@@ -9,6 +9,9 @@ import com.gungorefe.simpleportfolio.exception.ExceptionFactory;
 import com.gungorefe.simpleportfolio.repository.page.about.AboutRepository;
 import com.gungorefe.simpleportfolio.service.filestorage.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,12 +22,20 @@ public class AboutService {
     private final AboutRepository repository;
     private final ImageService imageService;
 
+    @Cacheable(
+            value = "aboutPages",
+            key = "#localeName.value"
+    )
     public AboutDto getDto(LocaleName localeName) {
         return repository.findWithSimpleCardsByLocale_Name(localeName)
                 .map(About::toDto)
                 .orElseThrow(() -> ExceptionFactory.pageNotFoundException(About.NAME, localeName));
     }
 
+    @Cacheable(
+            value = "aboutPageImages",
+            key = "#localeName.value"
+    )
     public Image getImage(LocaleName localeName) {
         String imageName = repository.findImageNameByLocale_Name(localeName)
                 .orElseThrow(() -> ExceptionFactory.pageNotFoundException(About.NAME, localeName));
@@ -32,6 +43,16 @@ public class AboutService {
         return imageService.get(imageName);
     }
 
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "aboutPages",
+                    key = "#localeName.value"
+            ),
+            @CacheEvict(
+                    value = "aboutPageImages",
+                    key = "#localeName.value"
+            )
+    })
     public About update(
             LocaleName localeName,
             UpdateAboutRequest request,

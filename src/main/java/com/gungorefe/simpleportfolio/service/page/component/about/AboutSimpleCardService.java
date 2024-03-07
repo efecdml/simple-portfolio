@@ -10,6 +10,9 @@ import com.gungorefe.simpleportfolio.exception.ExceptionFactory;
 import com.gungorefe.simpleportfolio.repository.page.component.about.AboutSimpleCardRepository;
 import com.gungorefe.simpleportfolio.service.filestorage.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +38,10 @@ public class AboutSimpleCardService {
         return repository.save(card);
     }
 
+    @Cacheable(
+            value = "aboutSimpleCardComponents",
+            key = "#id"
+    )
     public CardDto getDto(int id) {
         return repository.findById(id)
                 .map(AboutSimpleCard::toDto)
@@ -47,12 +54,26 @@ public class AboutSimpleCardService {
         return AboutSimpleCard.toDtoList(cards);
     }
 
+    @Cacheable(
+            value = "aboutSimpleCardComponentImages",
+            key = "#id"
+    )
     public Image getImage(int id) {
         String imageName = getImageName(id);
 
         return imageService.get(imageName);
     }
 
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "aboutSimpleCardComponents",
+                    key = "#request.id()"
+            ),
+            @CacheEvict(
+                    value = "aboutSimpleCardComponentImages",
+                    key = "#request.id()"
+            )
+    })
     public AboutSimpleCard update(
             UpdateCardRequest request,
             @Nullable MultipartFile image
@@ -73,6 +94,16 @@ public class AboutSimpleCardService {
         return repository.save(card);
     }
 
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "aboutSimpleCardComponents",
+                    key = "#id"
+            ),
+            @CacheEvict(
+                    value = "aboutSimpleCardComponentImages",
+                    key = "#id"
+            )
+    })
     public void delete(int id) {
         String imageName = getImageName(id);
 

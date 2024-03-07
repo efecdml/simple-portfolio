@@ -11,6 +11,9 @@ import com.gungorefe.simpleportfolio.exception.ExceptionFactory;
 import com.gungorefe.simpleportfolio.repository.page.component.home.HomeCarouselSectionRepository;
 import com.gungorefe.simpleportfolio.service.filestorage.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +39,10 @@ public class HomeCarouselSectionService {
         return repository.save(section);
     }
 
+    @Cacheable(
+            value = "homeCarouselSectionComponents",
+            key = "#id"
+    )
     public CarouselSectionDto getDto(int id) {
         return repository.findById(id)
                 .map(HomeCarouselSection::toDto)
@@ -48,12 +55,26 @@ public class HomeCarouselSectionService {
         return CarouselSection.toDtoList(sections);
     }
 
+    @Cacheable(
+            value = "homeCarouselSectionComponentImages",
+            key = "#id"
+    )
     public Image getImage(int id) {
         String imageName = getImageName(id);
 
         return imageService.get(imageName);
     }
 
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "homeCarouselSectionComponents",
+                    key = "#request.id()"
+            ),
+            @CacheEvict(
+                    value = "homeCarouselSectionComponentImages",
+                    key = "#request.id()"
+            )
+    })
     public HomeCarouselSection update(
             UpdateCarouselSectionRequest request,
             @Nullable MultipartFile image
@@ -74,6 +95,16 @@ public class HomeCarouselSectionService {
         return repository.save(section);
     }
 
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "homeCarouselSectionComponents",
+                    key = "#id"
+            ),
+            @CacheEvict(
+                    value = "homeCarouselSectionComponentImages",
+                    key = "#id"
+            )
+    })
     public void delete(int id) {
         String imageName = getImageName(id);
 

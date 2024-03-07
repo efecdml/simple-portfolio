@@ -7,6 +7,8 @@ import com.gungorefe.simpleportfolio.entity.page.home.Home;
 import com.gungorefe.simpleportfolio.exception.ExceptionFactory;
 import com.gungorefe.simpleportfolio.repository.page.home.HomeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class HomeService {
     private final HomeRepository repository;
 
+    @Cacheable(
+            value = "homePages",
+            key = "#localeName.value"
+    )
     @Transactional(readOnly = true)
     public HomeDto getDto(LocaleName localeName) {
         Home home = repository.findWithCarouselSectionsByLocale_Name(localeName)
@@ -25,6 +31,10 @@ public class HomeService {
         return home.toDto();
     }
 
+    @CacheEvict(
+            value = "homePages",
+            key = "#localeName.value"
+    )
     public Home update(
             LocaleName localeName,
             UpdateHomeRequest request

@@ -9,6 +9,8 @@ import com.gungorefe.simpleportfolio.entity.page.contact.Contact;
 import com.gungorefe.simpleportfolio.exception.ExceptionFactory;
 import com.gungorefe.simpleportfolio.repository.page.component.contact.ContactPhoneRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,10 @@ public class ContactPhoneService {
         return repository.save(phone);
     }
 
+    @Cacheable(
+            value = "contactPhoneComponents",
+            key = "#id"
+    )
     public PhoneDto getDto(int id) {
         return repository.findById(id)
                 .map(Phone::toDto)
@@ -36,6 +42,10 @@ public class ContactPhoneService {
         return Phone.toDtoList(phones);
     }
 
+    @CacheEvict(
+            value = "contactPhoneComponents",
+            key = "#request.id()"
+    )
     public ContactPhone update(UpdatePhoneRequest request) {
         int id = request.id();
         ContactPhone phone = repository.findForUpdateById(id)
@@ -48,6 +58,10 @@ public class ContactPhoneService {
         return repository.save(phone);
     }
 
+    @CacheEvict(
+            value = "contactPhoneComponents",
+            key = "#id"
+    )
     public void delete(int id) {
         repository.deleteById(id);
     }

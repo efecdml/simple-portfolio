@@ -11,6 +11,9 @@ import com.gungorefe.simpleportfolio.exception.ExceptionFactory;
 import com.gungorefe.simpleportfolio.repository.page.component.home.HomeDetailedCardRepository;
 import com.gungorefe.simpleportfolio.service.filestorage.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +39,10 @@ public class HomeDetailedCardService {
         return repository.save(card);
     }
 
+    @Cacheable(
+            value = "homeDetailedCardComponents",
+            key = "#id"
+    )
     public CardDto getDto(int id) {
         return repository.findById(id)
                 .map(HomeDetailedCard::toDto)
@@ -48,12 +55,26 @@ public class HomeDetailedCardService {
         return DetailedCard.toDtoList(cards);
     }
 
+    @Cacheable(
+            value = "homeDetailedCardComponentImages",
+            key = "#id"
+    )
     public Image getImage(int id) {
         String imageName = getImageName(id);
 
         return imageService.get(imageName);
     }
 
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "homeDetailedCardComponents",
+                    key = "#request.id()"
+            ),
+            @CacheEvict(
+                    value = "homeDetailedCardComponentImages",
+                    key = "#request.id()"
+            )
+    })
     public HomeDetailedCard update(
             UpdateCardRequest request,
             @Nullable MultipartFile image
@@ -74,6 +95,16 @@ public class HomeDetailedCardService {
         return repository.save(card);
     }
 
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "homeDetailedCardComponents",
+                    key = "#id"
+            ),
+            @CacheEvict(
+                    value = "homeDetailedCardComponentImages",
+                    key = "#id"
+            )
+    })
     public void delete(int id) {
         String imageName = getImageName(id);
 
