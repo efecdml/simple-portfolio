@@ -10,6 +10,9 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.CacheControl;
 import org.springframework.lang.NonNull;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -20,10 +23,15 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
 
-@RequiredArgsConstructor(onConstructor = @__(@Lazy))
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     private final ConversionService conversionService;
+    private final List<String> domains;
+
+    public WebConfig(@Lazy ConversionService conversionService, WebProperties properties) {
+        this.conversionService = conversionService;
+        domains=properties.domains();
+    }
 
     @Override
     public void addFormatters(@NonNull FormatterRegistry registry) {
@@ -56,5 +64,19 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/")
                 .setCacheControl(CacheControl.maxAge(Duration.ZERO));
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(domains);
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 }
