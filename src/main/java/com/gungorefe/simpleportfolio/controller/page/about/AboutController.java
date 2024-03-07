@@ -6,6 +6,7 @@ import com.gungorefe.simpleportfolio.dto.page.about.AboutDto;
 import com.gungorefe.simpleportfolio.dto.page.about.UpdateAboutRequest;
 import com.gungorefe.simpleportfolio.entity.page.LocaleName;
 import com.gungorefe.simpleportfolio.service.page.about.AboutService;
+import com.gungorefe.simpleportfolio.util.WebUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -24,7 +25,7 @@ public class AboutController {
     public ResponseEntity<AboutDto> getDto(@AcceptHeader LocaleName localeName) {
         AboutDto dto = service.getDto(localeName);
 
-        return ResponseEntity.ok(dto);
+        return WebUtils.responseEntityForCachingDto(dto);
     }
 
     @Operation(summary = "Get image of About page")
@@ -32,9 +33,7 @@ public class AboutController {
     public ResponseEntity<byte[]> getImage(@AcceptHeader LocaleName localeName) {
         Image image = service.getImage(localeName);
 
-        return ResponseEntity.ok()
-                .contentType(image.mediaType())
-                .body(image.content());
+        return WebUtils.responseEntityForCachingImage(image);
     }
 
     @Operation(summary = "Update About page")

@@ -5,6 +5,7 @@ import com.gungorefe.simpleportfolio.dto.page.component.CardDto;
 import com.gungorefe.simpleportfolio.dto.page.component.CreateCardRequest;
 import com.gungorefe.simpleportfolio.dto.page.component.UpdateCardRequest;
 import com.gungorefe.simpleportfolio.service.page.component.home.HomeDetailedCardService;
+import com.gungorefe.simpleportfolio.util.WebUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -42,7 +43,7 @@ public class HomeDetailedCardController {
     public ResponseEntity<CardDto> getDto(@PathVariable int id) {
         CardDto dto = service.getDto(id);
 
-        return ResponseEntity.ok(dto);
+        return WebUtils.responseEntityForCachingDto(dto);
     }
 
     @Operation(summary = "Get all Home Detailed Card components")
@@ -58,9 +59,7 @@ public class HomeDetailedCardController {
     public ResponseEntity<byte[]> getImage(@PathVariable int id) {
         Image image = service.getImage(id);
 
-        return ResponseEntity.ok()
-                .contentType(image.mediaType())
-                .body(image.content());
+        return WebUtils.responseEntityForCachingImage(image);
     }
 
     @Operation(summary = "Update Home Detailed Card component")

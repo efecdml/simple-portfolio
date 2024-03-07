@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public record Image(
+        String name,
         MediaType mediaType,
         byte[] content
 ) {
@@ -14,12 +15,12 @@ public record Image(
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Image image = (Image) o;
-        return Objects.equals(mediaType, image.mediaType) && Arrays.equals(content, image.content);
+        return Objects.equals(name, image.name) && Objects.equals(mediaType, image.mediaType) && Arrays.equals(content, image.content);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(mediaType);
+        int result = Objects.hash(name, mediaType);
         result = 31 * result + Arrays.hashCode(content);
         return result;
     }
@@ -27,7 +28,8 @@ public record Image(
     @Override
     public String toString() {
         return "Image{" +
-                "mediaType=" + mediaType +
+                "name='" + name + '\'' +
+                ", mediaType=" + mediaType +
                 ", content=" + Arrays.toString(content) +
                 '}';
     }

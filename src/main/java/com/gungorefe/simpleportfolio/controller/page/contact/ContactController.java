@@ -5,6 +5,7 @@ import com.gungorefe.simpleportfolio.dto.page.contact.ContactDto;
 import com.gungorefe.simpleportfolio.dto.page.contact.UpdateContactRequest;
 import com.gungorefe.simpleportfolio.entity.page.LocaleName;
 import com.gungorefe.simpleportfolio.service.page.contact.ContactService;
+import com.gungorefe.simpleportfolio.util.WebUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ContactController {
     public ResponseEntity<ContactDto> getDto(@AcceptHeader LocaleName localeName) {
         ContactDto dto = service.getDto(localeName);
 
-        return ResponseEntity.ok(dto);
+        return WebUtils.responseEntityForCachingDto(dto);
     }
 
     @Operation(summary = "Update Contact page")

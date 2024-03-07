@@ -5,6 +5,7 @@ import com.gungorefe.simpleportfolio.dto.page.home.HomeDto;
 import com.gungorefe.simpleportfolio.dto.page.home.UpdateHomeRequest;
 import com.gungorefe.simpleportfolio.entity.page.LocaleName;
 import com.gungorefe.simpleportfolio.service.page.home.HomeService;
+import com.gungorefe.simpleportfolio.util.WebUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class HomeController {
     public ResponseEntity<HomeDto> getDto(@AcceptHeader LocaleName localeName) {
         HomeDto dto = service.getDto(localeName);
 
-        return ResponseEntity.ok(dto);
+        return WebUtils.responseEntityForCachingDto(dto);
     }
 
     @Operation(summary = "Update Home page")

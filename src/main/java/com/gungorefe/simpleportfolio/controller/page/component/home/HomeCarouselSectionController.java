@@ -5,6 +5,7 @@ import com.gungorefe.simpleportfolio.dto.page.component.CarouselSectionDto;
 import com.gungorefe.simpleportfolio.dto.page.component.CreateCarouselSectionRequest;
 import com.gungorefe.simpleportfolio.dto.page.component.UpdateCarouselSectionRequest;
 import com.gungorefe.simpleportfolio.service.page.component.home.HomeCarouselSectionService;
+import com.gungorefe.simpleportfolio.util.WebUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -42,7 +43,7 @@ public class HomeCarouselSectionController {
     public ResponseEntity<CarouselSectionDto> getDto(@PathVariable int id) {
         CarouselSectionDto dto = service.getDto(id);
 
-        return ResponseEntity.ok(dto);
+        return WebUtils.responseEntityForCachingDto(dto);
     }
 
     @Operation(summary = "Get all Home Carousel Section components")
@@ -58,9 +59,7 @@ public class HomeCarouselSectionController {
     public ResponseEntity<byte[]> getImage(@PathVariable int id) {
         Image image = service.getImage(id);
 
-        return ResponseEntity.ok()
-                .contentType(image.mediaType())
-                .body(image.content());
+        return WebUtils.responseEntityForCachingImage(image);
     }
 
     @Operation(summary = "Update Home Carousel Section component")

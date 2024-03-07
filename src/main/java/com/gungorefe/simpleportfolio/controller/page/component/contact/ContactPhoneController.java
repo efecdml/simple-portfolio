@@ -4,6 +4,7 @@ import com.gungorefe.simpleportfolio.dto.page.component.CreatePhoneRequest;
 import com.gungorefe.simpleportfolio.dto.page.component.PhoneDto;
 import com.gungorefe.simpleportfolio.dto.page.component.UpdatePhoneRequest;
 import com.gungorefe.simpleportfolio.service.page.component.contact.ContactPhoneService;
+import com.gungorefe.simpleportfolio.util.WebUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class ContactPhoneController {
     public ResponseEntity<PhoneDto> getDto(@PathVariable int id) {
         PhoneDto dto = service.getDto(id);
 
-        return ResponseEntity.ok(dto);
+        return WebUtils.responseEntityForCachingDto(dto);
     }
 
     @Operation(summary = "Get all Contact Phone components")

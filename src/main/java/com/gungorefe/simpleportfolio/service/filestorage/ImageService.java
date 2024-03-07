@@ -53,6 +53,7 @@ public class ImageService extends FileStorageService {
         MediaType mediaType = generateMediaType(content);
 
         return new Image(
+                name,
                 mediaType,
                 content
         );

@@ -1,11 +1,14 @@
 package com.gungorefe.simpleportfolio.util;
 
 import com.google.common.net.HttpHeaders;
+import com.gungorefe.simpleportfolio.dto.filestorage.Image;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -62,5 +65,20 @@ public final class WebUtils extends org.springframework.web.util.WebUtils {
                 !xffHeader.contains(remoteAddress)
                 ? remoteAddress
                 : xffHeader.split(";")[0];
+    }
+
+    public static <T> ResponseEntity<T> responseEntityForCachingDto(T body) {
+        return ResponseEntity.ok()
+                .eTag(String.valueOf(body.hashCode()))
+                .cacheControl(CacheControl.maxAge(Duration.ZERO))
+                .body(body);
+    }
+
+    public static ResponseEntity<byte[]> responseEntityForCachingImage(Image image) {
+        return ResponseEntity.ok()
+                .eTag(image.name())
+                .cacheControl(CacheControl.maxAge(Duration.ZERO))
+                .contentType(image.mediaType())
+                .body(image.content());
     }
 }
